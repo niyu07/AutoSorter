@@ -1,18 +1,25 @@
 # AutoSorter
 
-This tool automatically sorts the folder folder
+AutoSorter is a tool designed to automatically sort files in a specified folder based on their extensions.
 
-<structure>
-.
-├── LICENSE
-├── README.md
-├── app
-│   ├── app.py
-│   ├── static
-│   └── templates
-│       └── index.html
-├── run.py
-└── storing.py
+## Project Structure
 
-If you want to add css, please add it to the “static” directory
-the js is written in index.html, but if you want to write it separately, put it in the “static” directory.
+
+### Folder and File Overview
+
+- **LICENSE**: The license file for the project.
+- **README.md**: This file with project documentation.
+- **app/**: Contains the main application code.
+  - **app.py**: The main application script.
+  - **static/**: Directory for static files such as CSS and JavaScript.
+  - **templates/**: Directory for HTML templates.
+    - **index.html**: The main HTML file for the project.
+- **run.py**: Script to run the application.
+- **storing.py**: Contains logic related to file storage.
+
+### Adding CSS and JavaScript
+
+- **CSS**: Place your CSS files in the `static` directory.
+- **JavaScript**: Currently written directly in `index.html`. To separate JavaScript files, place them in the `static` directory and link them in the HTML file.
+
+For further information on usage or contributions, please refer to the project documentation or contact the maintainers.
