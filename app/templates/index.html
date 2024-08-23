@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>フォルダ内ファイル自動仕分けツール</title>
+</head>
+<body>
+    <div class="container">
+        <h1>フォルダ内ファイル自動仕分けツール</h1>
+        <p>このツールでは選択されたフォルダ内のファイルを拡張子ごとに分類します。</p>
+        <p>分類されたファイルは、デスクトップの "sorted_files" フォルダ内に保存されます。</p>
+        <p><strong>注意:</strong> ファイルはコピーされるため、元のファイルは削除されません。</p>
+        <p>フォルダの中にフォルダがある場合、そのサブフォルダ内のファイルも処理されます。</p>
+
+        <div class="function">
+            <form id="uploadForm" enctype="multipart/form-data">
+                <label for="folderInput">フォルダを選択してください:</label>
+                <input type="file" id="folderInput" name="files[]" webkitdirectory directory multiple />
+                <button type="submit" id="sortButton">ファイルを分類する</button>
+            </form>
+            
+            <h2>選択されたフォルダ内のファイル:</h2>
+            <ul id="fileList"></ul>
+
+            <h2>分類結果:</h2>
+            <ul id="sortedFileList"></ul>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const folderInput = document.getElementById('folderInput');
+            const fileList = document.getElementById('fileList');
+            const sortedFileList = document.getElementById('sortedFileList');
+            const uploadForm = document.getElementById('uploadForm');
+
+            folderInput.addEventListener('change', function(event) {
+                fileList.innerHTML = '';
+                const files = event.target.files;
+
+                for (let i = 0; i < files.length; i++) {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = files[i].webkitRelativePath || files[i].name;
+                    fileList.appendChild(listItem);
+                }
+            });
+
+            uploadForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                console.log('Form submitted');
+
+                const files = folderInput.files;
+                if (files.length === 0) {
+                    alert('フォルダが選択されていません');
+                    return;
+                }
+
+                const formData = new FormData();
+                for (let i = 0; i < files.length; i++) {
+                    formData.append('files[]', files[i], files[i].webkitRelativePath || files[i].name);
+                }
+
+                fetch('/sort-files', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Server response:', data);
+                    alert(data.message);
+
+                    // 分類されたファイルを表示
+                    sortedFileList.innerHTML = '';
+                    for (const [folder, fileNames] of Object.entries(data.classified_files)) {
+                        const folderItem = document.createElement('li');
+                        folderItem.textContent = `フォルダ: ${folder}`;
+                        sortedFileList.appendChild(folderItem);
+
+                        const fileListItem = document.createElement('ul');
+                        fileNames.forEach(fileName => {
+                            const fileItem = document.createElement('li');
+                            fileItem.textContent = fileName;
+                            fileListItem.appendChild(fileItem);
+                        });
+                        sortedFileList.appendChild(fileListItem);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('エラーが発生しました: ' + error.message);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

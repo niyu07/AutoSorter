@@ -1,0 +1,3 @@
+#以下にgit hubで管理しないものを書いていく
+.venv
+.DS_Store
