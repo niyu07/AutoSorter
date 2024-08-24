@@ -22,4 +22,4 @@ AutoSorter is a tool designed to automatically sort files in a specified folder 
 - **CSS**: Place your CSS files in the `static` directory.
 - **JavaScript**: Currently written directly in `index.html`. To separate JavaScript files, place them in the `static` directory and link them in the HTML file.
 
-For further information on usage or contributions, please refer to the project documentation or contact the maintainers.
+If you know absolute or relative paths, you can use " storing.py "
