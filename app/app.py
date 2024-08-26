@@ -12,7 +12,7 @@ MOVE_TO = os.path.join(DESKTOP_DIR, "sorted_files")
 os.makedirs(MOVE_TO, exist_ok=True)
 
 # 許可する拡張子をセットで定義
-ALLOWED_EXTENSIONS = {"txt", "zip", "html", "css", "jpg", "png", "pdf", "mp3", "mp4", "js", "docx", "xlsx", "pptx", "java", "csv", "cpp", "cs"}
+ALLOWED_EXTENSIONS = {"txt", "zip", "html", "css", "jpg", "png", "pdf", "mp3", "mp4", "js", "docx", "xlsx", "pptx", "java", "csv", "cpp", "cs", "avif"}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -37,7 +37,8 @@ def sort_files():
             continue
 
         filename = secure_filename(file.filename)
-        file_extension = filename.rsplit('.', 1)[1].lower()
+        parts = filename.rsplit('.', 1)
+        file_extension = parts[1].lower() if len(parts) > 1 else ''
         folder_name = file_extension if file_extension in ALLOWED_EXTENSIONS else 'others'
         folder_path = os.path.join(MOVE_TO, folder_name)
 
