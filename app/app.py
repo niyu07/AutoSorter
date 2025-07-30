@@ -14,12 +14,15 @@ os.makedirs(MOVE_TO, exist_ok=True)
 # 許可する拡張子をセットで定義
 ALLOWED_EXTENSIONS = {"txt", "zip", "html", "css", "jpg", "png", "pdf", "mp3", "mp4", "js", "docx", "xlsx", "pptx", "java", "csv", "cpp", "cs"}
 
+# ファイルの拡張子が上のリストで定義されてているかを確認する関数
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+# アクセスした時に表示されるページの指定
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/sort-files', methods=['POST'])
 def sort_files():
